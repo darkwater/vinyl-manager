@@ -1,0 +1,28 @@
+<h1 class="screen-title">Repositories</h1>
+
+<ul class="repositories">
+    <li *ngFor="let repo of repos"
+        [class.editing]="repo === selectedRepo"
+        (click)="onSelect(repo)">
+        {{ repo.host }}:{{ repo.path }}
+
+        <div *ngIf="repo === selectedRepo">
+            <p>
+                <label>
+                    host:
+                    <input [(ngModel)]="selectedRepo.host" placeholder="path" />
+                </label>
+            </p>
+            <p>
+                <label>
+                    path:
+                    <input [(ngModel)]="selectedRepo.path" placeholder="path" />
+                </label>
+            </p>
+
+            <p>
+                <button (click)="saveSelected()">Save</button>
+            </p>
+        </div>
+    </li>
+</ul>
