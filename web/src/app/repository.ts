@@ -1,5 +1,5 @@
 export class Repository {
-    id:   number;
+    id?:  number;
     host: string;
     path: string;
 }

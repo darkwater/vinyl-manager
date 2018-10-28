@@ -11,7 +11,7 @@ import { Repository } from "./repository";
 })
 export class ManagerService {
 
-    private api = "http://localhost:4201";
+    private api = "http://172.24.0.2:4201";
 
     constructor(private http: HttpClient) { }
 
@@ -28,6 +28,22 @@ export class ManagerService {
 
         return this.http.put(url, repo).pipe(
             catchError(this.handleError("updateRepository"))
+        );
+    }
+
+    deleteRepository(repo: Repository): Observable<any> {
+        const url = `${this.api}/repositories/${repo.id}`;
+
+        return this.http.delete(url).pipe(
+            catchError(this.handleError("deleteRepository"))
+        );
+    }
+
+    createRepository(repo: Repository): Observable<any> {
+        const url = `${this.api}/repositories/`;
+
+        return this.http.post(url, repo).pipe(
+            catchError(this.handleError("createRepository"))
         );
     }
 

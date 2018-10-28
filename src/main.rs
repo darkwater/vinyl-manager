@@ -37,15 +37,38 @@ fn update_repository(repo_id: i32, repo: Json<UpdateRepository>, conn: DbConn) -
         .map_err(|_| Status::InternalServerError)
 }
 
+#[post("/repositories", data = "<repo>")]
+fn create_repository(repo: Json<CreateRepository>, conn: DbConn) -> Result<(), Status> {
+    use crate::schema::repositories::dsl::*;
+
+    diesel::insert_into(repositories)
+        .values(&*repo)
+        .execute(&*conn)
+        .map(|_| ())
+        .map_err(|_| Status::InternalServerError)
+}
+
+#[delete("/repositories/<repo_id>")]
+fn delete_repository(repo_id: i32, conn: DbConn) -> Result<(), Status> {
+    use crate::schema::repositories::dsl::*;
+
+    diesel::delete(repositories.find(repo_id))
+        .execute(&*conn)
+        .map(|_| ())
+        .map_err(|_| Status::InternalServerError)
+}
+
 fn main() {
     rocket::Rocket::ignite()
         .manage(db::get_conn())
         .mount("/", routes![
             get_repositories,
             update_repository,
+            create_repository,
+            delete_repository,
         ])
         .attach(AdHoc::on_response(|req, res| {
-            res.set_header(header::AccessControlAllowOrigin::Value("http://localhost:4200".to_string()));
+            res.set_header(header::AccessControlAllowOrigin::Value("http://172.24.0.2:4200".to_string()));
 
             if req.method() == Method::Options && res.status() == Status::NotFound {
                 res.set_status(Status::Ok);

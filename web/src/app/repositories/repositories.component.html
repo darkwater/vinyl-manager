@@ -3,26 +3,60 @@
 <ul class="repositories">
     <li *ngFor="let repo of repos"
         [class.editing]="repo === selectedRepo"
+        role="button"
         (click)="onSelect(repo)">
-        {{ repo.host }}:{{ repo.path }}
 
-        <div *ngIf="repo === selectedRepo">
-            <p>
-                <label>
-                    host:
-                    <input [(ngModel)]="selectedRepo.host" placeholder="path" />
-                </label>
-            </p>
-            <p>
-                <label>
-                    path:
-                    <input [(ngModel)]="selectedRepo.path" placeholder="path" />
-                </label>
-            </p>
+        <span *ngIf="repo.id == null">
+            New repository
+        </span>
 
-            <p>
-                <button (click)="saveSelected()">Save</button>
-            </p>
-        </div>
+        <span *ngIf="repo.id != null">
+            {{ repo.host }}:{{ repo.path }}
+        </span>
     </li>
 </ul>
+
+<p *ngIf="!selectedRepo && !newRepo" class="actions">
+    <button (click)="onNew()">New</button>
+</p>
+
+<div *ngIf="selectedRepo" class="editor">
+    <p>
+        <label>
+            host:
+            <input [(ngModel)]="selectedRepo.host" placeholder="host" />
+        </label>
+    </p>
+    <p>
+        <label>
+            path:
+            <input [(ngModel)]="selectedRepo.path" placeholder="path" />
+        </label>
+    </p>
+
+    <p class="actions">
+        <button (click)="onSaveSelected()">Save</button>
+        <button (click)="onDelete()">Delete</button>
+        <button (click)="onCancel()">Cancel</button>
+    </p>
+</div>
+
+<div *ngIf="newRepo" class="editor">
+    <p>
+        <label>
+            host:
+            <input [(ngModel)]="newRepo.host" placeholder="host" />
+        </label>
+    </p>
+    <p>
+        <label>
+            path:
+            <input [(ngModel)]="newRepo.path" placeholder="path" />
+        </label>
+    </p>
+
+    <p class="actions">
+        <button (click)="onSaveNew()">Create</button>
+        <button (click)="onCancel()">Cancel</button>
+    </p>
+</div>

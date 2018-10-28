@@ -50,3 +50,10 @@ pub struct UpdateRepository {
     host: String,
     path: String,
 }
+
+#[derive(Insertable, Deserialize)]
+#[table_name="repositories"]
+pub struct CreateRepository {
+    host: String,
+    path: String,
+}
